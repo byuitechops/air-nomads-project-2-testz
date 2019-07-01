@@ -8,7 +8,25 @@ using AirNomadReportCompile;
 
 namespace ReportGenerator
 {
-    public class UnitTest1
+    public class JSONTests
+    {
+        [Fact]
+        public void Test1()
+        {
+            
+        }
+    }
+
+     public class CSVTests
+    {
+        [Fact]
+        public void Test1()
+        {
+            
+        }
+    }
+
+     public class HTMLTests
     {
         [Fact]
         public void Test1()
