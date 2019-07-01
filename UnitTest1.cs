@@ -1,5 +1,10 @@
 using System;
 using Xunit;
+using AirNomadHttpGrabers;
+using ReportGeneratorFunctions;
+using AirNomadPrompter;
+using ConsoleReport;
+using AirNomadReportCompile;
 
 namespace ReportGenerator
 {
