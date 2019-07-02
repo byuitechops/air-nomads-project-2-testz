@@ -1,0 +1,113 @@
+{
+  "id": 59796,
+  "name": "Eric Julander Sandbox",
+  "account_id": 8,
+  "uuid": "svKXJrbnMjAsVnsc9rCZjrwtiIjSPjZ0IUfIpVW7",
+  "start_at": null,
+  "grading_standard_id": null,
+  "is_public": null,
+  "created_at": "2019-06-26T14:46:32Z",
+  "course_code": "EJSB",
+  "default_view": "modules",
+  "root_account_id": 1,
+  "enrollment_term_id": 1,
+  "license": null,
+  "end_at": null,
+  "public_syllabus": false,
+  "public_syllabus_to_auth": false,
+  "storage_quota_mb": 2000,
+  "is_public_to_auth_users": false,
+  "apply_assignment_group_weights": false,
+  "calendar": {
+    "ics": "https://byui.instructure.com/feeds/calendars/course_svKXJrbnMjAsVnsc9rCZjrwtiIjSPjZ0IUfIpVW7.ics"
+  },
+  "time_zone": "America/Denver",
+  "blueprint": false,
+  "sis_course_id": null,
+  "integration_id": null,
+  "enrollments": [],
+  "hide_final_grades": false,
+  "workflow_state": "unpublished",
+  "restrict_enrollments_to_course_dates": false,
+  "Modules": [
+    {
+      "id": 591611,
+      "name": "Random Test Module #1",
+      "position": 1,
+      "unlock_at": null,
+      "require_sequential_progress": false,
+      "publish_final_grade": false,
+      "prerequisite_module_ids": [],
+      "published": true,
+      "items_count": 1,
+      "items_url": "https://byui.instructure.com/api/v1/courses/59796/modules/591611/items",
+      "Module_Items": [
+        {
+          "id": 5433942,
+          "title": "Super Important Mandatory Thing",
+          "position": 1,
+          "indent": 0,
+          "type": "Assignment",
+          "module_id": 591611,
+          "html_url": "https://byui.instructure.com/courses/59796/modules/items/5433942",
+          "content_id": 1921967,
+          "url": "https://byui.instructure.com/api/v1/courses/59796/assignments/1921967",
+          "published": true
+        }
+      ]
+    },
+    {
+      "id": 591613,
+      "name": "Less Important Thingz",
+      "position": 2,
+      "unlock_at": null,
+      "require_sequential_progress": false,
+      "publish_final_grade": false,
+      "prerequisite_module_ids": [
+        591611
+      ],
+      "published": true,
+      "items_count": 2,
+      "items_url": "https://byui.instructure.com/api/v1/courses/59796/modules/591613/items",
+      "Module_Items": [
+        {
+          "id": 5433944,
+          "title": "Less Important Thing",
+          "position": 1,
+          "indent": 0,
+          "type": "Assignment",
+          "module_id": 591613,
+          "html_url": "https://byui.instructure.com/courses/59796/modules/items/5433944",
+          "content_id": 1921969,
+          "url": "https://byui.instructure.com/api/v1/courses/59796/assignments/1921969",
+          "published": true
+        },
+        {
+          "id": 5433948,
+          "title": "Other insignificant thing yet vital to your grade.",
+          "position": 2,
+          "indent": 0,
+          "type": "Assignment",
+          "module_id": 591613,
+          "html_url": "https://byui.instructure.com/courses/59796/modules/items/5433948",
+          "content_id": 1921973,
+          "url": "https://byui.instructure.com/api/v1/courses/59796/assignments/1921973",
+          "published": true
+        }
+      ]
+    },
+    {
+      "id": 593275,
+      "name": "John was here",
+      "position": 3,
+      "unlock_at": null,
+      "require_sequential_progress": false,
+      "publish_final_grade": false,
+      "prerequisite_module_ids": [],
+      "published": false,
+      "items_count": 0,
+      "items_url": "https://byui.instructure.com/api/v1/courses/59796/modules/593275/items",
+      "Module_Items": []
+    }
+  ]
+}
