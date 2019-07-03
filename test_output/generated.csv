@@ -1,0 +1,4 @@
+Course_ID,Module_ID,id,title,position,indent,type,module_id,html_url,content_id,url,published
+59796,5433942,Super Important Mandatory Thing,1,0,Assignment,591611,https://byui.instructure.com/courses/59796/modules/items/5433942,1921967,https://byui.instructure.com/api/v1/courses/59796/assignments/1921967,True
+59796,5433944,Less Important Thing,1,0,Assignment,591613,https://byui.instructure.com/courses/59796/modules/items/5433944,1921969,https://byui.instructure.com/api/v1/courses/59796/assignments/1921969,True
+59796,5433948,Other insignificant thing yet vital to your grade.,2,0,Assignment,591613,https://byui.instructure.com/courses/59796/modules/items/5433948,1921973,https://byui.instructure.com/api/v1/courses/59796/assignments/1921973,True

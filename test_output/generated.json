@@ -25,7 +25,15 @@
   "blueprint": false,
   "sis_course_id": null,
   "integration_id": null,
-  "enrollments": [],
+  "enrollments": [
+    {
+      "type": "teacher",
+      "role": "TeacherEnrollment",
+      "role_id": 4,
+      "user_id": 160413,
+      "enrollment_state": "active"
+    }
+  ],
   "hide_final_grades": false,
   "workflow_state": "unpublished",
   "restrict_enrollments_to_course_dates": false,
