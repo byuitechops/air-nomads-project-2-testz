@@ -7,14 +7,14 @@ using AirNomadPrompter;
 using ConsoleReport;
 using AirNomadReportCompile;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 namespace ReportGenerator
 {
 
     public class GenerationTests
     {
         private const string RelPath = "../../../test_output/";
-        private static string HttpResults;
+    
         private static bool FilesAreEqual(string path1, string path2)
         {
             var actual = File.ReadAllText(path1);
@@ -29,17 +29,18 @@ namespace ReportGenerator
             // the test will go on forever if this token is not set! To fix that issue, we will fail the test if it is not set.
             var token = Environment.GetEnvironmentVariable("API_TOKEN");
             Assert.False(token == null);
-            var http = new CourseGrabber("59796");
-            HttpResults = await http.grabCourseData();
 
+            var http = new CourseGrabber("59796");
+            var HttpResults = await http.grabCourseData();
             Assert.Equal(HttpResults, System.IO.File.ReadAllText(RelPath + "expected.json"));
         }
 
         [Fact]
         public void JsonCompilesAsExpected()
         {
-            Assert.False(HttpResults == null);
-
+            
+            var HttpResults = System.IO.File.ReadAllText(RelPath+"expected.json");
+            //take the results from the first test and make it a json file
             var generator = new GenerateJSON(RelPath + "generated");
             var success = generator.GenerateReport(HttpResults);
 
@@ -51,7 +52,7 @@ namespace ReportGenerator
         public void CsvGeneratesAsExpected()
         {
 
-            Assert.False(HttpResults == null);
+            var HttpResults = System.IO.File.ReadAllText(RelPath+"expected.json");
             // sets up a course grabber object for us
             var generator = new GenerateCSV(RelPath + "generated");
             var success = generator.GenerateReport(HttpResults);
@@ -63,7 +64,7 @@ namespace ReportGenerator
         [Fact]
         public void HtmlGeneratesAsExpected()
         {
-            Assert.False(HttpResults == null);
+            var HttpResults = System.IO.File.ReadAllText(RelPath+"expected.json");
             var generator = new GenerateHTML(RelPath + "generated", RelPath + "boilerplate.html");
             var success = generator.GenerateReport(HttpResults);
 
@@ -98,17 +99,26 @@ namespace ReportGenerator
 
             return new GenerateJSON(destination);
         }
-        public async void FullProcessRuns()
+        [Fact]
+        public async Task FullProcessRuns()
         {
+            // the test will go on forever if this token is not set! To fix that issue, we will fail the test if it is not set.
+            var token = Environment.GetEnvironmentVariable("API_TOKEN");
+            Assert.False(token == null);
+
+            // the test will go on forever if this token is not set! To fix that issue, we will fail the test if it is not set.
+            var RelPath = "./unicorn/";
             List<Prompt> prompts = new List<Prompt>(){
-                new Prompt("59796","JSON",RelPath+"full_generated.json"),
-                new Prompt("59796","CSV",RelPath+"full_generated.csv"),
-                new Prompt("59796","HTML",RelPath+"full_generated.html")
+                new Prompt("59796","JSON", RelPath+"full_generated.json"),
+                new Prompt("59796","CSV", RelPath+"full_generated.csv"),
+                new Prompt("59796","HTML", RelPath+"full_generated.html")
             };
 
             /*We will now initialize some objects that will be used as we go execute the call for each prompt */
             var compiler = new ReportCompile();
             CourseGrabber http = new CourseGrabber();
+
+            var SuccessReports = new List<ReportItem>();
 
             /*Loop through each prompt, set up the http call, calibrate how the compiler should work and send the success reports to the Dictionary we have for keeping track of it */
             foreach (var prompt in prompts)
@@ -123,27 +133,31 @@ namespace ReportGenerator
                 }
                 catch (Exception e)
                 {
-                    System.Console.WriteLine(e.Message);
                     // Display all errors in an awesome fashion.
+                    ConsoleRep.Log(new string[] { "WE GOT AN ERROR BOSS!", e.Message, "Course: " + prompt.CourseId, prompt.OutFormat + " " + prompt.Destination }, ConsoleColor.Red);
                     success = false;
                 }
-                Assert.True(success);
-                Assert.True(FilesAreEqual(RelPath+"expected.json", prompts[0].Destination));
-                Assert.True(FilesAreEqual(RelPath+"expected.csv", prompts[0].Destination));
-                Assert.True(FilesAreEqual(RelPath+"expected.html", prompts[0].Destination));
-                
+                SuccessReports.Add(new ReportItem(prompt.OutFormat + " " + prompt.Destination + "    =====   " + (success ? "Successful" : "Error!"), success ? ConsoleColor.Green : ConsoleColor.Red));
             }
+
+            ConsoleRep.Log(SuccessReports);
+
+
 
         }
 
         [Fact]
-        public async void InvalidPromptFails()
+        public async Task HandlesInvalidPrompt()
         {
+            // the test will go on forever if this token is not set! To fix that issue, we will fail the test if it is not set.
+            var token = Environment.GetEnvironmentVariable("API_TOKEN");
+            Assert.False(token == null);
             var compiler = new ReportCompile();
-            CourseGrabber http = new CourseGrabber("59796");
-            var prompt = new Prompt("", "", "");
+            var prompt = new Prompt("", "", RelPath+"");
+            CourseGrabber http = new CourseGrabber(prompt.CourseId);
             compiler.CalibrateCompiler(grabReportObject(prompt.OutFormat, prompt.Destination), http);
-            Assert.False(await compiler.CompileReport());
+            var res = (await compiler.CompileReport());
+            Assert.True(res);
         }
     }
 
