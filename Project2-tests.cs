@@ -14,6 +14,7 @@ namespace ReportGenerator
     public class GenerationTests
     {
         private const string RelPath = "../../../test_output/";
+        private const string ExpRelPath = "../../../expected/";
     
         private static bool FilesAreEqual(string path1, string path2)
         {
@@ -32,50 +33,51 @@ namespace ReportGenerator
 
             var http = new CourseGrabber("59796");
             var HttpResults = await http.grabCourseData();
-            Assert.Equal(HttpResults, System.IO.File.ReadAllText(RelPath + "expected.json"));
+            Assert.Equal(HttpResults, System.IO.File.ReadAllText(ExpRelPath + "expected.json"));
         }
 
         [Fact]
         public void JsonCompilesAsExpected()
         {
             
-            var HttpResults = System.IO.File.ReadAllText(RelPath+"expected.json");
+            var HttpResults = System.IO.File.ReadAllText(ExpRelPath+"expected.json");
             //take the results from the first test and make it a json file
             var generator = new GenerateJSON(RelPath + "generated");
             var success = generator.GenerateReport(HttpResults);
 
             Assert.True(success);
-            Assert.True(FilesAreEqual(RelPath + "generated.json", RelPath + "expected.json"));
+            Assert.True(FilesAreEqual(RelPath + "generated.json", ExpRelPath + "expected.json"));
 
         }
         [Fact]
         public void CsvGeneratesAsExpected()
         {
 
-            var HttpResults = System.IO.File.ReadAllText(RelPath+"expected.json");
+            var HttpResults = System.IO.File.ReadAllText(ExpRelPath+"expected.json");
             // sets up a course grabber object for us
             var generator = new GenerateCSV(RelPath + "generated");
             var success = generator.GenerateReport(HttpResults);
 
             Assert.True(success);
-            Assert.True(FilesAreEqual(RelPath + "generated.csv", RelPath + "expected.csv"));
+            Assert.True(FilesAreEqual(RelPath + "generated.csv", ExpRelPath + "expected.csv"));
 
         }
         [Fact]
         public void HtmlGeneratesAsExpected()
         {
-            var HttpResults = System.IO.File.ReadAllText(RelPath+"expected.json");
-            var generator = new GenerateHTML(RelPath + "generated", RelPath + "boilerplate.html");
+            var HttpResults = System.IO.File.ReadAllText(ExpRelPath+"expected.json");
+            var generator = new GenerateHTML(RelPath + "generated", ExpRelPath + "boilerplate.html");
             var success = generator.GenerateReport(HttpResults);
 
             Assert.True(success);
-            Assert.True(FilesAreEqual(RelPath + "generated.html", RelPath + "expected.html"));
+            Assert.True(FilesAreEqual(RelPath + "generated.html", ExpRelPath + "expected.html"));
         }
     }
 
     public class EndToEndTest
     {
         private const string RelPath = "../../../test_output/";
+        private const string ExpRelPath = "../../../expected/";
         private static bool FilesAreEqual(string path1, string path2)
         {
             var actual = File.ReadAllText(path1);
@@ -90,7 +92,7 @@ namespace ReportGenerator
                 case "json":
                     return new GenerateJSON(destination);
                 case "html":
-                    return new GenerateHTML(destination, RelPath + "boilerplate.html");
+                    return new GenerateHTML(destination, ExpRelPath + "boilerplate.html");
                 case "csv":
                     return new GenerateCSV(destination);
                 default:
@@ -107,7 +109,6 @@ namespace ReportGenerator
             Assert.False(token == null);
 
             // the test will go on forever if this token is not set! To fix that issue, we will fail the test if it is not set.
-            var RelPath = "./unicorn/";
             List<Prompt> prompts = new List<Prompt>(){
                 new Prompt("59796","JSON", RelPath+"full_generated.json"),
                 new Prompt("59796","CSV", RelPath+"full_generated.csv"),
@@ -130,6 +131,7 @@ namespace ReportGenerator
                 try
                 {
                     success = await compiler.CompileReport();
+                    
                 }
                 catch (Exception e)
                 {
@@ -137,13 +139,11 @@ namespace ReportGenerator
                     ConsoleRep.Log(new string[] { "WE GOT AN ERROR BOSS!", e.Message, "Course: " + prompt.CourseId, prompt.OutFormat + " " + prompt.Destination }, ConsoleColor.Red);
                     success = false;
                 }
-                SuccessReports.Add(new ReportItem(prompt.OutFormat + " " + prompt.Destination + "    =====   " + (success ? "Successful" : "Error!"), success ? ConsoleColor.Green : ConsoleColor.Red));
+                Assert.True(success);
             }
-
-            ConsoleRep.Log(SuccessReports);
-
-
-
+                Assert.True(FilesAreEqual(prompts[0].Destination, ExpRelPath+"expected.json"));
+                Assert.True(FilesAreEqual(prompts[1].Destination, ExpRelPath+"expected.csv"));
+                Assert.True(FilesAreEqual(prompts[2].Destination, ExpRelPath+"expected.html"));
         }
 
         [Fact]
